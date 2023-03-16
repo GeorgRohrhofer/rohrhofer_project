@@ -1,5 +1,5 @@
 syntax = "proto3";
 
-message Dummy {
+message JsonRPC {
   string text = 1;
 }
