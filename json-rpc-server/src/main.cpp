@@ -26,19 +26,20 @@ int main() {
 
     JsonRPC *jrpc = new JsonRPC;
     //jrpc->set_text("Hallo")
-    asio::io_context ctx;
-    tcp::endpoint ep{tcp::v4(), 9999};
-    tcp::acceptor acceptor{ctx, ep}; // IO object
-    acceptor.listen();
-    tcp::socket sock{ctx};
-    acceptor.accept(sock);
-    tcp::iostream *strm = new tcp::iostream(std::move(sock));
-    //shorter: tcp::iostream strm{acceptor.accept()};
-    jrpc->ParseFromIstream(strm);
-    strm->close();
+    while(true){
+        asio::io_context ctx;
+        tcp::endpoint ep{tcp::v4(), 9999};
+        tcp::acceptor acceptor{ctx, ep}; // IO object
+        acceptor.listen();
+        tcp::socket sock{ctx};
+        acceptor.accept(sock);
+        tcp::iostream *strm = new tcp::iostream(std::move(sock));
+        //shorter: tcp::iostream strm{acceptor.accept()};
+        jrpc->ParseFromIstream(strm);
+        strm->close();
 
-    spdlog::info(jrpc->text());
-
+        spdlog::info(jrpc->text());
+    }
     /*
     cout << jrpc->text() << endl;
     jrpc->SerializeToOstream(&cout);

@@ -3,6 +3,7 @@
 #include <ostream>
 #include <thread>
 #include <asio.hpp>
+#include <spdlog/spdlog.h>
 
 #include "messages.pb.h"
 
@@ -14,14 +15,26 @@ int main() {
     GOOGLE_PROTOBUF_VERIFY_VERSION;
     JsonRPC *jrpc = new JsonRPC();
     jrpc->set_text("HELO");
-    tcp::iostream *strm = new tcp::iostream("localhost", "9999");
-    //ostream str{};
-    if(strm){
-        jrpc->SerializeToOstream(strm);
-        //strm << str;
+    asio::io_context ctx;
+    tcp::resolver resolver{ctx};
+    try{
+        auto results = resolver.resolve("localhost", "9999");
+        tcp::socket sock{ctx};
+
+        asio::connect(sock, results);
+
+        spdlog::info("Connected to Server");
+
+        const char request[]{jrpc->text()};
+        size_t request_size = strlen(request);
+
+        asio::write(sock, asio::buffer(request, request_size));
+        spdlog::info("Request Sent");
+    }
+    catch(asio::system_error& e){
+        spdlog::error(e.what());
     }
 
     delete jrpc;
-    delete strm;
     return 0;
 }
