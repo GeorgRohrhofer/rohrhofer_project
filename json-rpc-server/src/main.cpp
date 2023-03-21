@@ -2,6 +2,7 @@
 #include <iostream>
 #include <thread>
 #include <asio.hpp>
+#include <spdlog/spdlog.h>
 
 #include "messages.pb.h"
 
@@ -11,6 +12,18 @@ using namespace asio::ip;
 //int main(int argc, char* argv[]) {
 int main() {
     GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+    spdlog::info("Server is running on port 9999");
+    
+    // change log pattern
+    //spdlog::set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [thread %t] %v");
+    
+    // Compile time log levels
+    // define SPDLOG_ACTIVE_LEVEL to desired level
+    SPDLOG_TRACE("Some trace message with param {}", 42);
+    SPDLOG_DEBUG("Some debug message");
+
+
     JsonRPC *jrpc = new JsonRPC;
     //jrpc->set_text("Hallo")
     asio::io_context ctx;
@@ -24,7 +37,7 @@ int main() {
     jrpc->ParseFromIstream(strm);
     strm->close();
 
-    cout << jrpc->text() << endl;
+    spdlog::info(jrpc->text());
 
     /*
     cout << jrpc->text() << endl;
