@@ -14,7 +14,7 @@ using namespace asio::ip;
 int main() {
     GOOGLE_PROTOBUF_VERIFY_VERSION;
     JsonRPC *jrpc = new JsonRPC();
-    jrpc->set_text("HELO");
+    jrpc->set_text("add");
     asio::io_context ctx;
     tcp::resolver resolver{ctx};
     try{
@@ -25,10 +25,11 @@ int main() {
 
         spdlog::info("Connected to Server");
 
-        const char request[]{jrpc->text()};
-        size_t request_size = strlen(request);
+        asio::streambuf b;
+        ostream os(&b);
+        jrpc->SerializeToOstream(&os);
 
-        asio::write(sock, asio::buffer(request, request_size));
+        asio::write(sock, b);
         spdlog::info("Request Sent");
     }
     catch(asio::system_error& e){

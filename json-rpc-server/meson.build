@@ -3,7 +3,7 @@ project('json-rpc-server', 'cpp',
         license : ['Boost'],
         version : '0.1',
         # don't change anything of the three following options!
-        default_options : ['cpp_std=c++17', 'warning_level=3', 'werror=true'])
+        default_options : ['cpp_std=c++17', 'warning_level=0', 'werror=false'])
 
 thread_dep = dependency('threads')
 
@@ -41,7 +41,7 @@ generated = gen.process('src/messages.proto')
 
 inc_dir = include_directories('include')
 #src = ['src/main.cpp']
-src = ['src/main.cpp', generated]
+src = ['src/main.cpp', 'src/server.cpp', 'src/utils.cpp' , generated]
 
 executable('json-rpc-server',
            sources : src,
