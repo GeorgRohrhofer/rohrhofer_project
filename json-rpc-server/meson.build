@@ -20,7 +20,7 @@ add_global_arguments('-DASIO_NO_DEPRECATED', language : 'cpp')
 add_global_arguments('-I' + get_option('spdlog_include_dir'), language : 'cpp')
 
 # json: https://github.com/nlohmann/json
-#add_global_arguments('-I' + get_option('json_include_dir'), language : 'cpp')
+add_global_arguments('-I' + get_option('json_include_dir'), language : 'cpp')
 
 # add additional include global arguments appropriately!
 
@@ -43,7 +43,7 @@ inc_dir = include_directories('include')
 #src = ['src/main.cpp']
 src = ['src/main.cpp', 'src/server.cpp', 'src/utils.cpp' , generated]
 
-executable('json-rpc-server',
+executable('server',
            sources : src,
            include_directories : inc_dir,
            dependencies : [thread_dep, protobuf_dep]

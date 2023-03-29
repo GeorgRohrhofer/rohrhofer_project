@@ -1,7 +1,11 @@
 * CHANGELOG
-**[Unreleased]
+**[1.0] 2023-03-28
 *** Added
-- 
+- Documentation
+- synchronous Communication
+- transmitting messages as json
+- registering functions on Server
+- start registered functions
 **[0.0.3] - 2023-02-12
 *** Added
 - Seperate Project for Client and Server

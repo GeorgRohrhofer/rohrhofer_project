@@ -3,7 +3,7 @@ project('json-rpc-client', 'cpp',
         license : ['Boost'],
         version : '0.1',
         # don't change anything of the three following options!
-        default_options : ['cpp_std=c++17', 'warning_level=3', 'werror=true'])
+        default_options : ['cpp_std=c++17', 'warning_level=0', 'werror=false'])
 
 thread_dep = dependency('threads')
 
@@ -18,9 +18,9 @@ add_global_arguments('-DASIO_NO_DEPRECATED', language : 'cpp')
 
 # spdlog: https://github.com/gabime/spdlog
 add_global_arguments('-I' + get_option('spdlog_include_dir'), language : 'cpp')
- 
+
 # json: https://github.com/nlohmann/json
-#add_global_arguments('-I' + get_option('json_include_dir'), language : 'cpp')
+add_global_arguments('-I' + get_option('json_include_dir'), language : 'cpp')
 
 # add additional include global arguments appropriately!
 
@@ -41,9 +41,9 @@ generated = gen.process('src/messages.proto')
 
 inc_dir = include_directories('include')
 #src = ['src/main.cpp']
-src = ['src/main.cpp', generated]
+src = ['src/main.cpp', 'src/json-rpc.cpp', generated]
 
-executable('json-rpc-client',
+executable('client',
            sources : src,
            include_directories : inc_dir,
            dependencies : [thread_dep, protobuf_dep]

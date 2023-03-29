@@ -14,7 +14,10 @@ int main() {
     Server s{9999};
 
     s.register_calc_function("add", add);
-
+    s.register_calc_function("subtract", subtract);
+    s.register_calc_function("multiply", multiply);
+    s.register_calc_function("divide", divide);
+    
     s.start();
 
     return 0;

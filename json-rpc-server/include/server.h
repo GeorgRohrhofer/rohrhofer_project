@@ -1,14 +1,19 @@
 #pragma once
 
 #include <map>
+#include <initializer_list>
+#include <vector>
+#include <asio.hpp>
 
 #include "messages.pb.h"
+
 
 class Server{
 private:
     JsonRPC *jrpc = new JsonRPC;
     unsigned short port{};
-    std::map<std::string, std::function<double(double, double)>> calc_functions; 
+    std::map<std::string, std::function<std::string(std::vector<double>)>> calc_functions;
+    void serve_client(asio::ip::tcp::socket&& sock);
 
 public:
     Server(unsigned short port) : port{port}{}
@@ -16,6 +21,6 @@ public:
         delete jrpc;
     }
     void start();
-    void register_calc_function(std::string tag, std::function<double(double, double)> func);
-    double start_calc_function(std::string tag, double value_1, double value_2);
+    void register_calc_function(std::string tag, std::function<std::string(std::vector<double>)> list);
+    std::string start_calc_function(std::string tag, std::vector<double>);
 };
